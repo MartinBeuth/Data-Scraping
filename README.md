@@ -17,7 +17,7 @@ Data Scraping ist eine Technik, bei der ein Computerprogramm Daten aus der von M
 Das nachfolgende Projekt arbeitet folgende Use Cases ab: 
 
 **Usecase1 - Importieren und Verarbeiten von Kundendaten:**
-Der Code liest Daten aus verschiedenen Tabellenblättern (Kunden, Aufträge und Produkte) und ordnet die relevanten Informationen zu. Dies ermöglicht die weitere Verarbeitung und Analyse von Kundendaten.
+Der Code liest Daten aus verschiedenen Tabellenblättern (*customers*,*orders*,*products*) und ordnet die relevanten Informationen zu. Dies ermöglicht die weitere Verarbeitung und Analyse von Kundendaten.
 
 **Usecase2 - Erstellen von eindeutigen Kundenobjekten:**
 
@@ -25,10 +25,10 @@ Es wird eine Liste von Kunden-Objekten erstellt. Jedes Kunden-Objekt stellt eine
 
 **Usecase3 - Serialisierung und Deserialisierung von Kundenobjekten:**
 
-Die Kunden-Objekte werden in einer Datei (serFile) hinterlergt.
+Die Kunden-Objekte werden in einer Datei (*serFile*) hinterlergt.
 
 **Usecase4 - Exportieren von Kundendaten in eine CSV-Datei:**
-Die Kundendaten werden in eine CSV-Datei geschrieben. Jede Zeile enthält die Angaben zu einem Kunden. Dadurch können die Daten in Tabellenkalkulationsprogramme importiert oder weiter analysiert werden.
+Die Kundendaten werden in eine CSV-Datei(*ser_spread*) geschrieben. Jede Zeile enthält die Angaben zu einem Kunden. Dadurch können die Daten in Tabellenkalkulationsprogramme importiert oder weiter analysiert werden.
 
 **Usecase5 - HTML-Ausgabe generieren:**
  Im Rahmen des generierten HTML-Dokuments (*output.html*) werden die Kundeninformationen in tabellarischer Form angezeigt. 
