@@ -1,0 +1,22 @@
+App.java
+serialize.deserializeUniqueCustomers(serFile))
+
+-Console Output kann weg. 
+
+-generelleDatengewinnung erklären:
+an Hand der Klassen
+Orders, OrdersToolbox, Products, Customers 
+und dem Interface Distribution 
+-die Methode Import und Distribution erklären (check)
+-spezielle Datengewinnung erklären an Hand von Orders:
+Orders Aktivitätsdiagramme
+-Use Cases abarbeiten
+
+
+- Serialisierung erklären an Hand von Unique Customer und UniqueCustomerSerializer
+
+
+-decisiontree algorithm using  using a binary search tree  starbucks
+
+https://newdevsguide.com/2023/04/08/mermaid-class-diagrams/
+https://www.guru99.com/uml-class-diagram.html
