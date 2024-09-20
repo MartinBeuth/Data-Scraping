@@ -7,6 +7,7 @@
 | [Ansatz](#ansatz) | [Hintergrund](#hintergrund) |
 | [Klassendiagramm](#klassendiagramm) | [Datengewinnung](#datengewinnung) |
 | [Serialisierungsprozess](#serialisierungsprozess) | [Ausgabe](#ausgabe) |
+| [Tests](#tests) ||
 
 
 ---
@@ -193,3 +194,6 @@ class App {
     }
 App --> Perform
 ```
+---
+## Tests
+Im Ordner *Tests* sind für jede eingesetzte Klasse entsprechende JUnit-Tests hinterlegt. 
