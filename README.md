@@ -104,7 +104,7 @@ classDiagram
     UniqueCustomer --* UniqueCustomerSerializer : "enthält"
     
     Perform --> Distribution : "implementiert"
-    Perform --> Orders : "bearbeitet"
+    Perform --> Orders : "verwendet"
 
     Distribution <|.. Products : "wird implementiert von"
     Distribution <|.. Customers : "wird implementiert von"
