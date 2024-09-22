@@ -40,20 +40,32 @@ Sequenzdiagramm für die Use-Cases:
 ```mermaid
 
 sequenceDiagram
+    participant User as "Benutzer"
+    participant System as "System"
+
+    %% Importieren und Verarbeiten von Kundendaten
     User ->> System: Importieren und Verarbeiten von Kundendaten
     System ->> System: Daten verarbeiten
     System -->> User: Daten verarbeitet
+
+    %% Erstellen von eindeutigen Kundenobjekten
     User ->> System: Erstellen von eindeutigen Kundenobjekten
-    System ->> System: Erstelle Objekte
+    System ->> System: Objekte erstellen
     System -->> User: Objekte erstellt
-    User ->> System: Serialisierung und Deserialisierung von Kundenobjekten
-    System ->> System: Serialisieren/ Deserialisieren
-    System -->> User: Objekte serialisiert / deserialisiert
-    User ->> System: Exportieren von Kundendaten in eine CSV-Datei
+
+    %% Serialisierung und Deserialisierung von Kundenobjekten
+    User ->> System: Serialisierung/Deserialisierung von Kundenobjekten
+    System ->> System: Serialisieren/Deserialisieren
+    System -->> User: Objekte serialisiert/deserialisiert
+
+    %% Exportieren von Kundendaten in eine CSV-Datei
+    User ->> System: Exportieren von Kundendaten in CSV
     System ->> System: Daten exportieren
     System -->> User: Daten exportiert
+
+    %% HTML-Ausgabe erstellen
     User ->> System: HTML-Ausgabe erstellen
-    System ->> System: erstellt HTML
+    System ->> System: HTML erstellen
     System -->> User: HTML wurde erstellt
 ```
 
@@ -71,17 +83,34 @@ Darüber hinaus werden unstrukturierte Dateien in strukturierte Formate umgewand
 Im Folgenden wird das vollständige Klassendiagramm präsentiert, welches im Rahmen des vorliegenden Projekts zum Einsatz kommt:
 ```mermaid
 classDiagram
-class Distribution { <<interface>> }
-Orders --|> OrdersToolbox
-Perform --> UniqueCustomer
-Perform --> UniqueCustomerSerializer
-UniqueCustomer --*UniqueCustomerSerializer
-Perform --> Distribution
-Perform --> Orders
-Distribution <|.. Products
-Distribution <|.. Customers
-Distribution <|.. Orders
-App --> Perform
+    %% Interfaces
+    class Distribution { <<interface>> }
+
+    %% Klassen
+    class OrdersToolbox { }
+    class Perform { }
+    class UniqueCustomer { }
+    class UniqueCustomerSerializer { }
+    class Products { }
+    class Customers { }
+    class Orders { }
+    class App { }
+
+    %% Beziehungen
+    OrdersToolbox --|> Orders : "verwendet"
+    Perform --> UniqueCustomer : "verarbeitet"
+    Perform --> UniqueCustomerSerializer : "serialisiert"
+    
+    UniqueCustomer --* UniqueCustomerSerializer : "enthält"
+    
+    Perform --> Distribution : "implementiert"
+    Perform --> Orders : "bearbeitet"
+
+    Distribution <|.. Products : "wird implementiert von"
+    Distribution <|.. Customers : "wird implementiert von"
+    Distribution <|.. Orders : "wird implementiert von"
+
+    App --> Perform : "verwendet"
 ```
 
 ---
