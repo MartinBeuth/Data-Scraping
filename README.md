@@ -7,7 +7,7 @@
 | [Ansatz](#ansatz) | [Hintergrund](#hintergrund) |
 | [Klassendiagramm](#klassendiagramm) | [Datengewinnung](#datengewinnung) |
 | [Serialisierungsprozess](#serialisierungsprozess) | [Ausgabe](#ausgabe) |
-| [Tests](#tests) ||
+| [Update](#update) |[Tests](#tests)|
 
 
 ---
@@ -223,6 +223,204 @@ class App {
     }
 App --> Perform
 ```
+---
+## Update
+
+#### Allgemein
+Das Update, alle nötigen Dateien befinden sich in dem Ordner *Performanceverbesserung*, behebt mehrere zentrale Probleme der vorherigen Implementierung: Modularität, Effizienz, Flexibilität, Benutzerfreundlichkeit, Hinterlegen der Daten in einer Datenbank.
+
+Folgende UseCases werden abgearbeitet:
+
+**Usecase1 - Importieren und Verarbeiten von Kundendaten:**  Der Code liest Daten aus verschiedenen Tabellenblättern (_customers_,_orders_,_products_) und ordnet die relevanten Informationen zu. Dies ermöglicht die weitere Verarbeitung und Analyse von Kundendaten.
+
+**Usecase2 - Erstellen von eindeutigen Kundenobjekten:**
+
+Es wird eine Liste von Kunden-Objekten erstellt. Jedes Kunden-Objekt stellt einen eindeutigen Kunden dar und enthält Informationen wie Kunden-ID, Name, E-Mail und Land.
+
+**Usecase3 - Serialisierung und Deserialisierung von Kundenobjekten:**
+
+Die Kunden-Objekte werden in einer Datei (_serFile_) hinterlergt.
+
+**Usecase4 - Exportieren von Kundendaten in eine CSV-Datei:**  Die Kundendaten werden in eine CSV-Datei(_ser_spread_) geschrieben. Jede Zeile enthält die Angaben zu einem Kunden. Dadurch können die Daten in Tabellenkalkulationsprogramme importiert oder weiter analysiert werden.
+
+**Usecase5 - HTML-Ausgabe generieren:**  Im Rahmen des generierten HTML-Dokuments (_output_verbesserung.html_) werden die Kundeninformationen in tabellarischer Form angezeigt.
+
+**Usecase6 - Hinterlegen der Daten in einer Datenbank:**  Die Kundendaten werden in einer Datenbank mit Namen *test* hinterlegt.
+
+**Usecase7 - Datenbankabfragen**  Das bessere Filtern ist nun möglich. 
+
+Sequenzdiagramm für die Use-Cases:
+
+```mermaid
+sequenceDiagram  
+participant User as "Benutzer"  
+participant System as "System"  
+  
+%% Importieren und Verarbeiten von Kundendaten  
+User ->> System: Importieren und Verarbeiten von Kundendaten  
+System ->> System: Daten aus _customers_, _orders_, _products_ lesen  
+System -->> User: Daten verarbeitet  
+  
+%% Erstellen von eindeutigen Kundenobjekten  
+User ->> System: Erstellen von eindeutigen Kundenobjekten  
+System ->> System: Objekte erstellen (ID, Name, E-Mail, Land)  
+System -->> User: Objekte erstellt  
+  
+%% Serialisierung und Deserialisierung von Kundenobjekten  
+User ->> System: Serialisierung von Kundenobjekten  
+System ->> System: Objekte in _serFile_ speichern  
+System -->> User: Objekte serialisiert  
+  
+%% Exportieren von Kundendaten in eine CSV-Datei  
+User ->> System: Exportieren von Kundendaten in CSV  
+System ->> System: Daten in _ser_spread_ exportieren  
+System -->> User: Daten exportiert  
+  
+%% HTML-Ausgabe erstellen  
+User ->> System: HTML-Ausgabe erstellen  
+System ->> System: HTML-Dokument (_output.html_) generieren  
+System -->> User: HTML wurde erstellt  
+  
+%% Hinterlegen der Daten in einer Datenbank  
+User ->> System: Kundendaten in Datenbank *test* hinterlegen  
+System ->> System: Daten speichern  
+System -->> User: Daten gespeichert  
+  
+%% Datenbankabfragen durchführen  
+User ->> System: Datenbankabfragen durchführen  
+System ->> System: Abfragen ausführen  
+System -->> User: Gefilterte Daten bereitgestellt
+```
+
+Das aktuelle Klassendiagramm sieht wie folgt aus:
+
+```mermaid
+classDiagram
+
+%% Beziehungen
+
+Performupdate  --> UniqueCustomer : "verarbeitet"
+
+Performupdate  --> UniqueCustomerSerializer : "serialisiert"
+
+Performupdate  --> Database : "verwendet"
+
+Performupdate  --> Orders : "verwendet"
+
+Performupdate  --> Forker : "verwendet"
+
+Performupdate  --> DistributionFactory : "verwendet"
+
+Database  --> UniqueCustomer : "verarbeitet"
+
+Forker  --> UniqueCustomer : "erstellt"
+
+  
+
+UniqueCustomer  --* UniqueCustomerSerializer : "enthält"
+
+  
+
+Orders  --|> OrdersToolbox : "erbt von"
+
+Orders  ..|> Distribution : "implementiert"
+
+  
+
+Customers  ..|> Distribution : "implementiert"
+
+Products  ..|> Distribution : "implementiert"
+
+  
+
+Database  --|> DatabaseRequests : "erbt von"
+
+  
+
+App  --> Performupdate : "verwendet"
+
+  
+
+%% Factory-Beziehungen
+
+DistributionFactory  --> Distribution : "erstellt"
+```
+
+
+
+---
+
+#### Klasse Peformupdate
+Die grundlegenden Aufgaben der Datenverarbeitung bleiben unverändert, während die Implementierung des Factory-Entwurfsmusters und die Parallelverarbeitung die Verarbeitungsgeschwindigkeit verbessern.
+
+Die Veränderungen im einzelnen:
+
+- **Modularisierung und Lesbarkeit**
+- -  **Methodenstruktur**: Die neue Klasse `Performupdate` verwendet eine klarere Trennung von Verantwortlichkeiten durch die Einführung spezifischer Methoden wie `importSheets`, `createUniqueCustomers` und `outputToFiles`. Dies verbessert die Lesbarkeit und Wartbarkeit des Codes, da jede Methode eine spezifische Aufgabe hat, im Gegensatz zur monolithischen Struktur der `performance`-Methode in der Klasse `Perform`.
+
+- **Verwendung von Factory-Methoden**
+- - **DistributionFactory**: Anstelle von direkten Instanziierungen der `Distribution`-Klassen in `Perform`, nutzt `Performupdate` ein Factory-Entwurfsmuster (`DistributionFactory.getDistribution`).  Neue Distribution-Typen können hinzugefügt werden, ohne `Performupdate` zu ändern. Die zentrale Verwaltung in der Factory erhöht die Wartbarkeit und ermöglicht flexible Objekterstellung zur Laufzeit. Zudem reduziert es Abhängigkeiten und bereitet das System auf zukünftige Änderungen vor.
+
+
+
+- **Parallelverarbeitung**
+- - **ForkJoinPool**: In der ursprünglichen `performance`-Methode wurde die Datenverarbeitung sequentiell durchgeführt. Jede Aufgabe wurde nacheinander ausgeführt, was eine Zeitkomplexität von *O(n)* für jede Schleife ergab. Mit dem Fork/Join-Framework wird die Verarbeitung in kleinere Aufgaben unterteilt, die parallel ausgeführt werden. Bei *n* Elementen und *p* Threads wird sich die Laufzeit auf *O(n/p)* verringern, wobei p die Anzahl der verfügbaren Prozessoren ist. Die Parallelisierung verbessert die Leistung, insbesondere bei steigenden Datenmengen, und erhöht die Verarbeitungsgeschwindigkeit.
+
+- **Verbesserte Fehlerbehandlung**
+- - **Konsistente Fehlerausgaben**: Die Struktur in `Performupdate` ist klarer und konzentriert sich auf spezifische Aufgaben, was die Nachverfolgbarkeit von Fehlern erleichtert.
+
+- **Datenbankintegration**
+- - **Datenbankoperationen**: Datenbankoperationen sind direkt im Workflow integriert. Eine Datenbankinstanz speichert Kundeninformationen und führt Abfragen durch. Dadurch werden alle Daten zentral verwaltet und die Interoperabilität mit anderen Systemen verbessert.
+
+- **Verbesserte Ausgabeformate**
+- -  **HTML-Ausgabe**: Die HTML-Ausgabe in `Performupdate` hat ein verbessertes Design. E-Mail-Adressen, die nicht verfügbar sind, werden rot angezeigt.
+
+- **Flexibilität und Erweiterbarkeit**
+- - **Erweiterte Parameterübergabe**: Die Methode `performance` in der neuen Klasse akzeptiert ein zusätzliches Argument vom Typ `Database`, was es ermöglicht, unterschiedliche Datenbankimplementierungen zu verwenden.
+
+---
+
+#### Klasse Database
+
+Die Klasse `Database` implementiert eine Datenbankverwaltung für die Kundeninformationen. Sie verwendet den H2-Datenbanktreiber (`org.h2.Driver`), um eine Verbindung zu einer lokalen H2-Datenbank unter dem Pfad `~/data/test` herzustellen.
+
+Im Einzelnen:
+- **Architektur**
+- - Die Klasse `Database` ist so aufgebaut, dass sie eine Verbindung zur H2-Datenbank herstellt und eine Tabelle für die Speicherung von Kundeninformationen erstellt. 
+
+- **Verwaltungsstruktur**
+
+ | Spalte | Datentyp | Beschreibung |
+|-------------|------------------|--------------------------------------------------|
+  | id | INT | Primärschlüssel, automatisch inkrementiert |
+   | customerID | VARCHAR(50) | ID des Kunden |
+   | name | VARCHAR(100) | Name des Kunden | 
+   | email | VARCHAR(100) | E-Mail-Adresse des Kunden |
+   | country | VARCHAR(50) | Land des Kunden | 
+   | coffeeType | VARCHAR(5) | Typ des Kaffees |
+
+
+- **CRUD**
+
+| Operation | Methode | Beschreibung |
+ |-----------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+  | Create | createTable() | Erstellt die Tabelle, wenn sie nicht bereits existiert. | 
+  | Read | queryData() | Ruft alle Datensätze aus der Tabelle ab und zeigt sie in der Konsole an. | 
+  | Update | insertCustomers(List<UniqueCustomer> customers) | Fügt mehrere Kunden in die Tabelle ein, um SQL-Injection zu vermeiden. |
+   | Update | updateCustomer(int id, UniqueCustomer updatedCustomer) | Aktualisiert bestehende Kundeninformationen anhand ihrer ID. | 
+   | Delete | deleteDatabase() | Datenbank wird gelöscht. |
+
+---
+#### Klasse Forker
+
+Die Klasse `Forker` ermöglicht die parallele Verarbeitung von Kundendaten unter Verwendung des Fork/Join-Frameworks in Java. Das Framework basiert auf der *Divide-and-Conquer-Strategie*. Hierbei wird eine Aufgabe in kleinere, handhabbare Teile zerlegt (Forking), die parallel ausgeführt werden, und anschließend werden die Ergebnisse zusammengeführt (Joining)
+
+
+Die Klasse akzeptiert verschiedene Listen als Parameter, die Informationen zu Bestellungen, Namen, E-Mails, Ländern und Kaffeesorten enthalten. Zusätzlich wird eine Liste von `UniqueCustomer`-Objekten bereitgestellt, in der die verarbeiteten Kundendaten gespeichert werden.
+
+In der Methode `compute()` wird rekursiv entschieden, ob eine weitere Unterteilung der Daten erforderlich ist. Sind die Listen mit den Kundendaten kleiner oder gleich einer festgelegten Größe (THRESHOLD), erfolgt die Bearbeitung sequentiell. Für jeden Kunden wird ein `UniqueCustomer`-Objekt erstellt und der Ergebnisliste hinzugefügt. Bei größeren Listen erfolgt eine Teilung in zwei Hälften. Für jede Hälfte wird ein neuer Forker-Task initiiert, der die Daten weiter aufteilt und parallel bearbeitet.
+
+
 ---
 ## Tests
 Im Ordner *Tests* sind für jede eingesetzte Klasse entsprechende JUnit-Tests hinterlegt. 
