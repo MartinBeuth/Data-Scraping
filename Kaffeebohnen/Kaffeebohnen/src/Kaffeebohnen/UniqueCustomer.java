@@ -9,8 +9,19 @@ public class UniqueCustomer implements Serializable {
     private String email;
     private String country;
     private String coffeeType;
+    private int id;
 
     public void setAllData(String customerID, String name, String email, String country, String coffeeType) {
+        this.customerID = customerID;
+        this.names = name;
+        this.email = email;
+        this.country = country;
+        this.coffeeType = coffeeType;
+    }
+
+    public void setAllData2(int id, String customerID, String name, String email, String country,
+            String coffeeType) {
+        this.id = id;
         this.customerID = customerID;
         this.names = name;
         this.email = email;
@@ -56,6 +67,10 @@ public class UniqueCustomer implements Serializable {
 
     public void setCoffeeType(String coffeeType) {
         this.coffeeType = coffeeType;
+    }
+
+    public void setID(int id) {
+        this.id = id;
     }
 
 }
