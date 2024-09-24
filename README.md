@@ -15,7 +15,9 @@
 ## Ansatz
 Data Scraping ist eine Technik, bei der ein Computerprogramm Daten aus der von Menschen lesbaren Ausgabe eines anderen Programms extrahiert.
 
-Das nachfolgende Projekt arbeitet folgende Use Cases ab: 
+Updates werden implementiert, die den Fortschritt des Projekts dokumentieren. In der Inhaltsübersicht sind diese entsprechend aufgeführt.
+
+Folgende Use Cases werden abgearbeitet: 
 
 **Usecase1 - Importieren und Verarbeiten von Kundendaten:**
 Der Code liest Daten aus verschiedenen Tabellenblättern (*customers*,*orders*,*products*) und ordnet die relevanten Informationen zu. Dies ermöglicht die weitere Verarbeitung und Analyse von Kundendaten.
